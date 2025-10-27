@@ -1,0 +1,41 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace appSistemaVentas.Models
+{
+    public class DetalleVenta
+    {
+        [Key]
+        public int DetalleVentaId { get; set; }
+
+        [Required]
+        public int VentaId { get; set; }
+
+        [Required]
+        public int ProductoId { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor a 0")]
+        public int Cantidad { get; set; }
+
+        [Required]
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal PrecioUnitario { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Subtotal { get; set; }
+
+        // Propiedades de navegación
+        [ForeignKey("VentaId")]
+        public Venta? Venta { get; set; }
+
+        [ForeignKey("ProductoId")]
+        public Producto? Producto { get; set; }
+
+        // Método para calcular el subtotal
+        public void CalcularSubtotal()
+        {
+            Subtotal = Cantidad * PrecioUnitario;
+        }
+    }
+}

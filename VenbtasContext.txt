@@ -1,0 +1,108 @@
+using appSistemaVentas.Models;
+using Microsoft.EntityFrameworkCore;
+using appSistemaVentas.Models;
+
+namespace SistemaVentas.Data
+{
+    public class VentasContext : DbContext
+    {
+        public VentasContext(DbContextOptions<VentasContext> options) : base(options)
+        {
+        }
+
+        // DbSets - Representan las tablas en la base de datos
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Producto> Productos { get; set; }
+        public DbSet<Venta> Ventas { get; set; }
+        public DbSet<DetalleVenta> DetallesVenta { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configuración de índices únicos
+            modelBuilder.Entity<Cliente>()
+                .HasIndex(c => c.Documento)
+                .IsUnique();
+
+            // Configuración de relaciones
+            modelBuilder.Entity<Venta>()
+                .HasOne(v => v.Cliente)
+                .WithMany(c => c.Ventas)
+                .HasForeignKey(v => v.ClienteId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<DetalleVenta>()
+                .HasOne(d => d.Venta)
+                .WithMany(v => v.DetallesVenta)
+                .HasForeignKey(d => d.VentaId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<DetalleVenta>()
+                .HasOne(d => d.Producto)
+                .WithMany(p => p.DetallesVenta)
+                .HasForeignKey(d => d.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Datos de prueba (opcional)
+            modelBuilder.Entity<Cliente>().HasData(
+                new Cliente
+                {
+                    ClienteId = 1,
+                    Nombre = "Juan",
+                    Apellido = "Pérez",
+                    Documento = "123456789",
+                    Email = "juan@email.com",
+                    FechaRegistro = new DateTime(2024, 1, 15),
+                    Activo = true
+                },
+                new Cliente
+                {
+                    ClienteId = 2,
+                    Nombre = "María",
+                    Apellido = "González",
+                    Documento = "987654321",
+                    Email = "maria@email.com",
+                    FechaRegistro = new DateTime(2024, 1, 20),
+                    Activo = true
+                }
+            );
+
+            modelBuilder.Entity<Producto>().HasData(
+                new Producto
+                {
+                    ProductoId = 1,
+                    Nombre = "Laptop Dell",
+                    Descripcion = "Laptop i5 8GB RAM",
+                    Precio = 2500000,
+                    Stock = 10,
+                    Categoria = "Electrónica",
+                    FechaRegistro = new DateTime(2024, 1, 10),
+                    Activo = true
+                },
+                new Producto
+                {
+                    ProductoId = 2,
+                    Nombre = "Mouse Logitech",
+                    Descripcion = "Mouse inalámbrico",
+                    Precio = 80000,
+                    Stock = 50,
+                    Categoria = "Accesorios",
+                    FechaRegistro = new DateTime(2024, 1, 10),
+                    Activo = true
+                },
+                new Producto
+                {
+                    ProductoId = 3,
+                    Nombre = "Teclado Mecánico",
+                    Descripcion = "Teclado RGB",
+                    Precio = 250000,
+                    Stock = 25,
+                    Categoria = "Accesorios",
+                    FechaRegistro = new DateTime(2024, 1, 10),
+                    Activo = true
+                }
+            );
+        }
+    }
+}
