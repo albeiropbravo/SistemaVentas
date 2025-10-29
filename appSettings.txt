@@ -1,12 +1,12 @@
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=ALBEIROMURIEL\\SQLEXPRESS;Database=Ventas;Trusted_Connection=True;TrustServerCertificate=True;"
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  },
-  "AllowedHosts": "*"
+{  
+    "ConnectionStrings": {
+      "DefaultConnection": "Server=ALBEIROMURIEL\\SQLEXPRESS;Database=SistemaVentas;Trusted_Connection=True;TrustServerCertificate=True;"
+    },
+    "Logging": {
+      "LogLevel": {
+        "Default": "Information",
+        "Microsoft.AspNetCore": "Warning"
+      }
+    },
+    "AllowedHosts": "*"  
 }
